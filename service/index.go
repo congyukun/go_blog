@@ -49,13 +49,18 @@ func GetAllIndexInfo(page, pageSize int) (*models.HomeData, error) {
 	}
 	var pages []int
 	pagesCount := (total-1)/10 + 1
+
+	for i := 1; i <= pagesCount; i++ {
+		pages = append(pages, i)
+	}
+
 	return &models.HomeData{
-		Viewer: config.Config.Viewer,
+		Viewer:     config.Config.Viewer,
 		Categories: categories,
-		Posts: postMores,
-		Total: total,
-		Page: page,
-		Pages: pages,
-		PageEnd: page != pagesCount,
+		Posts:      postMores,
+		Total:      total,
+		Page:       page,
+		Pages:      pages,
+		PageEnd:    page != pagesCount,
 	}, nil
 }

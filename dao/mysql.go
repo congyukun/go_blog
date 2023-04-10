@@ -14,7 +14,7 @@ var DB *sql.DB
 
 func init() {
 	//执行main之前 先执行init方法
-	dataSourceName := fmt.Sprintf("root:123456@tcp(localhost:3306)/goblog?charset=utf8&loc=%s&parseTime=true", url.QueryEscape("Asia/shanghai"))
+	dataSourceName := fmt.Sprintf("root:123456@tcp(localhost:3307)/goblog?charset=utf8&loc=%s&parseTime=true", url.QueryEscape("Asia/shanghai"))
 	db, err := sql.Open("mysql", dataSourceName)
 	if err != nil {
 		log.Println("连接数据库异常")
@@ -35,4 +35,5 @@ func init() {
 		panic(err)
 	}
 	DB = db
+	
 }

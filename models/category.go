@@ -6,3 +6,9 @@ type Category struct {
 	CreatedAt string `json:"created_at"`
 	UpdatedAt string `json:"updated_at"`
 }
+
+
+type CategoryRes struct {
+	HomeData
+	CategoryName string 
+}
