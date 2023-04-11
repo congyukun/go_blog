@@ -2,6 +2,7 @@ package controller
 
 import (
 	"blog/common"
+	"blog/service"
 	"errors"
 	"log"
 	"net/http"
@@ -33,14 +34,18 @@ func (Html *HtmlApi) Category(w http.ResponseWriter, r *http.Request) {
 	}
 
 	page, err := strconv.Atoi(pageStr)
-	if err := r.ParseForm(); err != nil {
+	if err != nil {
 		categoryTemp.ExecuteError(w, errors.New("服务器错误"))
 		return
 	}
-
 	pageSize := 10
 
-	categoryResponse := service.GetCategoryById(cId, page, pageSize)
+	categoryResponse,err := service.GetPostByCategoryId(cId, page, pageSize)
+
+	if err != nil {
+		categoryTemp.ExecuteError(w,errors.New("服务器错误"))
+		return
+	} 
 
 	categoryTemp.ExecuteTemp(w, categoryResponse)
 

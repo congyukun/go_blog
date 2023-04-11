@@ -8,3 +8,9 @@ type User struct {
 	CreateAt int64  `json:"create_at"`
 	UpdateAt int64  `json:"update_at"`
 }
+
+type UserInfo struct {
+	Uid int `json:"uid"`
+	UserName string `json:"userName"`
+	Avatar string `json:"avatar"`
+}

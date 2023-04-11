@@ -9,6 +9,6 @@ type Category struct {
 
 
 type CategoryRes struct {
-	HomeData
+	*HomeData
 	CategoryName string 
 }

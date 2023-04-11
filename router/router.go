@@ -13,11 +13,13 @@ func Router() {
 	// 	w.Write([]byte("hello world"))
 	// })
 
-	// api
-	http.HandleFunc("/api/v1/index", api.Api.Index)
+	// view
 	http.HandleFunc("/c/", controller.Html.Category)
-
+	http.HandleFunc("/login", controller.Html.Login)
 	http.HandleFunc("/", controller.Html.Index)
+	http.HandleFunc("/api/v1/login", controller.Html.Index) 
+	//api
+	http.HandleFunc("/api", api.Api.Index)
 	// 静态资源
 	http.Handle("/resource/", http.StripPrefix("/resource/",
 		http.FileServer(http.Dir(config.Config.SystemConfig.CurrentDir+"/public/resource"))))

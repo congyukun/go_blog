@@ -1,9 +1,72 @@
 package service
 
-import "blog/models"
+import (
+	"blog/config"
+	"blog/dao"
+	"blog/models"
+	"html/template"
+)
 
+func GetPostByCategoryId(cId, page, pageSize int) (*models.CategoryRes, error) {
 
-func GetCategoryById(cId, page, pageSize int) models.CategoryRes {
-	var categories models.CategoryRes
-	return categories
+	categories, err := dao.GetAllCategory()
+	if err != nil {
+		return nil, err
+	}
+
+	posts, err := dao.GetAllPost(page, pageSize)
+	if err != nil {
+		return nil, err
+	}
+	var postMores []models.PostMore
+
+	for _, post := range posts {
+		categoryName := dao.GetCategoryNameById(post.CategoryId)
+		userName := dao.GetUserNameById(post.UserId)
+		content := []rune(post.Content)
+		if len(content) > 100 {
+			content = content[0:100]
+		}
+		postMore := models.PostMore{
+			Pid:          post.Pid,
+			Title:        post.Title,
+			Slug:         post.Slug,
+			Markdown:     post.Markdown,
+			Content:      template.HTML(content),
+			CategoryId:   post.CategoryId,
+			CategoryName: categoryName,
+			UserId:       post.UserId,
+			UserName:     userName,
+			ViewCount:    post.ViewCount,
+			Type:         post.Type,
+			CreateAt:     models.Date(post.CreateAt),
+			UpdateAt:     models.Date(post.UpdateAt),
+		}
+		postMores = append(postMores, postMore)
+	}
+	total, err := dao.GetTotal()
+	if err != nil {
+		return nil, err
+	}
+	var pages []int
+	pagesCount := (total-1)/10 + 1
+
+	for i := 1; i <= pagesCount; i++ {
+		pages = append(pages, i)
+	}
+	hr := &models.HomeData{
+		Viewer:     config.Config.Viewer,
+		Categories: categories,
+		Posts:      postMores,
+		Total:      total,
+		Page:       page,
+		Pages:      pages,
+		PageEnd:    page != pagesCount,
+	}
+	categoryName := dao.GetCategoryNameById(cId)
+	categoryRes := &models.CategoryRes{
+		HomeData: hr,
+	    CategoryName: categoryName,
+	} 
+	return categoryRes,nil
 }
